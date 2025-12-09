@@ -3,13 +3,13 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# Dummy in-memory database
+# Dummy database (RAM me store hoga)
 users_db = [
     {"id": 1, "name": "Rahul", "age": 25},
     {"id": 2, "name": "Aisha", "age": 22},
 ]
 
-# Request body ke liye model
+# Request body model for POST
 class UserCreate(BaseModel):
     name: str
     age: int
@@ -17,16 +17,16 @@ class UserCreate(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"message": "User API running successfully!"}
+    return {"message": "API Working!"}
 
 
-# 1) Saare users laane ka endpoint
+# Get all users
 @app.get("/users")
 def get_users():
     return {"users": users_db}
 
 
-# 2) Specific user by id
+# Get a specific user by ID
 @app.get("/users/{user_id}")
 def get_user(user_id: int):
     for user in users_db:
@@ -35,7 +35,7 @@ def get_user(user_id: int):
     return {"error": "User not found"}
 
 
-# 3) Naya user create karne ka endpoint (POST)
+# Create a new user using POST
 @app.post("/users")
 def create_user(user: UserCreate):
     new_id = len(users_db) + 1
